@@ -1,4 +1,4 @@
-package com.example.manga_volume_tracker
+package de.ghotra.manga_volume_tracker
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity
