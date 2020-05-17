@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:manga_volume_tracker/src/model/manga.dart';
+import 'package:manga_volume_tracker/src/widgets/edit_manga_dialog.dart';
 import 'package:manga_volume_tracker/src/widgets/manga_list_item.dart';
 import 'add_manga_page.dart';
 
@@ -39,8 +40,25 @@ class _MainPageState extends State<MainPage> {
         padding: const EdgeInsets.all(8.0),
         child: RefreshIndicator(
           child: ListView.builder(
-            itemBuilder: (context, index) => MangaListItem(
-              manga: mangas[index],
+            itemBuilder: (context, index) => GestureDetector(
+              onTap: () async {
+                var result = await showDialog(
+                  builder: (BuildContext context) {
+                    return EditMangaDialog(
+                      db: db,
+                      manga: mangas[index],
+                    );
+                  },
+                  context: context,
+                  barrierDismissible: true,
+                );
+                if (result ?? false) {
+                  _updateMangasList();
+                }
+              },
+              child: MangaListItem(
+                manga: mangas[index],
+              ),
             ),
             itemCount: mangas.length,
           ),

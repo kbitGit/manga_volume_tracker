@@ -75,6 +75,8 @@ class _AddMangaPageState extends State<AddMangaPage> {
                   inputFormatters: <TextInputFormatter>[
                     WhitelistingTextInputFormatter.digitsOnly
                   ],
+                  textInputAction: TextInputAction.next,
+                  onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
                 ),
                 TextFormField(
                   controller: currentVolumeController,
@@ -85,8 +87,6 @@ class _AddMangaPageState extends State<AddMangaPage> {
                   inputFormatters: <TextInputFormatter>[
                     WhitelistingTextInputFormatter.digitsOnly
                   ],
-                  textInputAction: TextInputAction.next,
-                  onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
                 ),
               ],
             ),

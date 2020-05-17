@@ -9,6 +9,7 @@ class MangaListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      elevation: 2,
       child: ListTile(
         title: Text(
           manga.title,
