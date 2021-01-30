@@ -73,7 +73,7 @@ class _AddMangaPageState extends State<AddMangaPage> {
                       InputDecoration(labelText: "Complete Volume Count"),
                   keyboardType: TextInputType.number,
                   inputFormatters: <TextInputFormatter>[
-                    WhitelistingTextInputFormatter.digitsOnly
+                    FilteringTextInputFormatter.digitsOnly,
                   ],
                   textInputAction: TextInputAction.next,
                   onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
@@ -85,7 +85,7 @@ class _AddMangaPageState extends State<AddMangaPage> {
                   keyboardType: TextInputType.number,
                   validator: _validateCurrentVolume,
                   inputFormatters: <TextInputFormatter>[
-                    WhitelistingTextInputFormatter.digitsOnly
+                    FilteringTextInputFormatter.digitsOnly,
                   ],
                 ),
               ],

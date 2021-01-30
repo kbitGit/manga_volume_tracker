@@ -12,7 +12,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  List<Manga> mangas = List();
+  List<Manga> mangas = [];
   final Database db;
 
   _MainPageState() : db = Database();
