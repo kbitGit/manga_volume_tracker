@@ -31,7 +31,7 @@ class _EditMangaDialogState extends State<EditMangaDialog> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text("Current Volume: $currentCount"),
-          FlatButton.icon(
+          TextButton.icon(
             onPressed: () {
               setState(() {
                 if (currentCount < totalCount) {
@@ -43,12 +43,12 @@ class _EditMangaDialogState extends State<EditMangaDialog> {
             label: Text("Increase current volume"),
           ),
           Text("Total Volumes: $totalCount"),
-          FlatButton.icon(
+          TextButton.icon(
             onPressed: () => setState(() => ++totalCount),
             icon: Icon(Icons.add),
             label: Text("Increase total volumes"),
           ),
-          RaisedButton.icon(
+          ElevatedButton.icon(
             onPressed: () async {
               var mangaToUpdate = widget.manga.copyWith(
                   currentVolume: currentCount, completeVolumeCount: totalCount);
