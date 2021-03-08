@@ -40,13 +40,13 @@ class _EditMangaDialogState extends State<EditMangaDialog> {
               });
             },
             icon: Icon(Icons.add),
-            label: Text("Increase current volume"),
+            label: Text("Aktuelle Bänder Anzahl erhöhen"),
           ),
           Text("Total Volumes: $totalCount"),
           TextButton.icon(
             onPressed: () => setState(() => ++totalCount),
             icon: Icon(Icons.add),
-            label: Text("Increase total volumes"),
+            label: Text("Komplette Bänder Anzahl erhöhen"),
           ),
           ElevatedButton.icon(
             onPressed: () async {

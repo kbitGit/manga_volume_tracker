@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:manga_volume_tracker/src/model/manga.dart';
 import 'package:manga_volume_tracker/src/widgets/edit_manga_dialog.dart';
 import 'package:manga_volume_tracker/src/widgets/manga_list_item.dart';
+import 'package:moor/moor.dart';
 import 'add_manga_page.dart';
 
 class MainPage extends StatefulWidget {
@@ -34,30 +35,70 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Manga List'),
+        title: Text('Manga Liste'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: RefreshIndicator(
           child: ListView.builder(
-            itemBuilder: (context, index) => GestureDetector(
-              onTap: () async {
-                var result = await showDialog(
-                  builder: (BuildContext context) {
-                    return EditMangaDialog(
-                      db: db,
-                      manga: mangas[index],
-                    );
-                  },
-                  context: context,
-                  barrierDismissible: true,
-                );
-                if (result ?? false) {
-                  _updateMangasList();
+            itemBuilder: (context, index) => Dismissible(
+              key: ValueKey(mangas[index]),
+              background: Container(
+                color: Colors.red,
+                alignment: AlignmentDirectional.centerStart,
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Icon(Icons.delete),
+                ),
+              ),
+              direction: DismissDirection.startToEnd,
+              onDismissed: (DismissDirection direction) async {
+                var deletedManga = mangas.removeAt(index);
+
+                setState(() {});
+                var affectedRows = await db.deleteManga(deletedManga);
+                if (affectedRows > 0) {
+                  final snackBar = SnackBar(
+                    content:
+                        Text('Manga: ${deletedManga.title} wurde gelöscht.'),
+                    action: SnackBarAction(
+                      label: 'Manga wiederherstellen.',
+                      onPressed: () async {
+                        await db.addManga(
+                          MangasCompanion(
+                            id: Value(deletedManga.id),
+                            title: Value(deletedManga.title),
+                            currentVolume: Value(deletedManga.currentVolume),
+                            completeVolumeCount:
+                                Value(deletedManga.completeVolumeCount),
+                          ),
+                        );
+                        _updateMangasList();
+                      },
+                    ),
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
                 }
               },
-              child: MangaListItem(
-                manga: mangas[index],
+              child: GestureDetector(
+                onTap: () async {
+                  var result = await showDialog(
+                    builder: (BuildContext context) {
+                      return EditMangaDialog(
+                        db: db,
+                        manga: mangas[index],
+                      );
+                    },
+                    context: context,
+                    barrierDismissible: true,
+                  );
+                  if (result ?? false) {
+                    _updateMangasList();
+                  }
+                },
+                child: MangaListItem(
+                  manga: mangas[index],
+                ),
               ),
             ),
             itemCount: mangas.length,
@@ -67,7 +108,7 @@ class _MainPageState extends State<MainPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _addManga,
-        tooltip: 'Add Manga',
+        tooltip: 'Manga hinzufügen',
         child: Icon(Icons.add),
       ),
     );

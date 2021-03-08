@@ -15,7 +15,7 @@ class MangaListItem extends StatelessWidget {
           manga.title,
         ),
         subtitle: Text(
-            '${manga.currentVolume} from ${manga.completeVolumeCount} purchased'),
+            '${manga.currentVolume} von ${manga.completeVolumeCount} Bändern gekauft'),
       ),
     );
   }

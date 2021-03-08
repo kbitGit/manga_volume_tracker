@@ -47,7 +47,7 @@ class _AddMangaPageState extends State<AddMangaPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Add New Manga"),
+        title: Text("Neuen Manga hinzufügen"),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20),
@@ -61,7 +61,7 @@ class _AddMangaPageState extends State<AddMangaPage> {
                   controller: nameController,
                   maxLines: 1,
                   validator: _validateName,
-                  decoration: InputDecoration(labelText: "Manga name"),
+                  decoration: InputDecoration(labelText: "Manga Name"),
                   textInputAction: TextInputAction.next,
                   onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
                 ),
@@ -70,7 +70,7 @@ class _AddMangaPageState extends State<AddMangaPage> {
                   maxLines: 1,
                   validator: _validateCompletedVolumeCount,
                   decoration:
-                      InputDecoration(labelText: "Complete Volume Count"),
+                      InputDecoration(labelText: "Komplette Bänder Anzahl"),
                   keyboardType: TextInputType.number,
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.digitsOnly,
@@ -81,7 +81,8 @@ class _AddMangaPageState extends State<AddMangaPage> {
                 TextFormField(
                   controller: currentVolumeController,
                   maxLines: 1,
-                  decoration: InputDecoration(labelText: "Current Volume"),
+                  decoration:
+                      InputDecoration(labelText: "Aktuelle Bänder Anzahl"),
                   keyboardType: TextInputType.number,
                   validator: _validateCurrentVolume,
                   inputFormatters: <TextInputFormatter>[
@@ -108,7 +109,7 @@ class _AddMangaPageState extends State<AddMangaPage> {
           }
         },
         icon: Icon(Icons.add),
-        label: Text("Add"),
+        label: Text("Hinzufügen"),
       ),
     );
   }
