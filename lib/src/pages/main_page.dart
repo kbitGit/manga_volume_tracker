@@ -41,65 +41,11 @@ class _MainPageState extends State<MainPage> {
         padding: const EdgeInsets.all(8.0),
         child: RefreshIndicator(
           child: ListView.builder(
-            itemBuilder: (context, index) => Dismissible(
-              key: ValueKey(mangas[index]),
-              background: Container(
-                color: Colors.red,
-                alignment: AlignmentDirectional.centerStart,
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Icon(Icons.delete),
-                ),
-              ),
-              direction: DismissDirection.startToEnd,
-              onDismissed: (DismissDirection direction) async {
-                var deletedManga = mangas.removeAt(index);
-
-                setState(() {});
-                var affectedRows = await db.deleteManga(deletedManga);
-                if (affectedRows > 0) {
-                  final snackBar = SnackBar(
-                    content:
-                        Text('Manga: ${deletedManga.title} wurde gelöscht.'),
-                    action: SnackBarAction(
-                      label: 'Manga wiederherstellen.',
-                      onPressed: () async {
-                        await db.addManga(
-                          MangasCompanion(
-                            id: Value(deletedManga.id),
-                            title: Value(deletedManga.title),
-                            currentVolume: Value(deletedManga.currentVolume),
-                            completeVolumeCount:
-                                Value(deletedManga.completeVolumeCount),
-                          ),
-                        );
-                        _updateMangasList();
-                      },
-                    ),
-                  );
-                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                }
-              },
-              child: GestureDetector(
-                onTap: () async {
-                  var result = await showDialog(
-                    builder: (BuildContext context) {
-                      return EditMangaDialog(
-                        db: db,
-                        manga: mangas[index],
-                      );
-                    },
-                    context: context,
-                    barrierDismissible: true,
-                  );
-                  if (result ?? false) {
-                    _updateMangasList();
-                  }
-                },
-                child: MangaListItem(
-                  manga: mangas[index],
-                ),
-              ),
+            itemBuilder: (context, index) => MangaListItem(
+              handleDeleteManga: _handleDeleteManga,
+              handleEditManga: _openEditMangaScreen,
+              index: index,
+              manga: mangas[index],
             ),
             itemCount: mangas.length,
           ),
@@ -112,6 +58,50 @@ class _MainPageState extends State<MainPage> {
         child: Icon(Icons.add),
       ),
     );
+  }
+
+  _handleDeleteManga(int index) async {
+    Manga deletedManga;
+    setState(() {
+      deletedManga = mangas.removeAt(index);
+    });
+    var affectedRows = await db.deleteManga(deletedManga);
+    if (affectedRows > 0 && deletedManga != null) {
+      final snackBar = SnackBar(
+        content: Text('Manga: ${deletedManga.title} wurde gelöscht.'),
+        action: SnackBarAction(
+          label: 'Manga wiederherstellen.',
+          onPressed: () async {
+            await db.addManga(
+              MangasCompanion(
+                id: Value(deletedManga.id),
+                title: Value(deletedManga.title),
+                currentVolume: Value(deletedManga.currentVolume),
+                completeVolumeCount: Value(deletedManga.completeVolumeCount),
+              ),
+            );
+            _updateMangasList();
+          },
+        ),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
+  }
+
+  void _openEditMangaScreen(int index, BuildContext context) async {
+    var result = await showDialog(
+      builder: (BuildContext context) {
+        return EditMangaDialog(
+          db: db,
+          manga: mangas[index],
+        );
+      },
+      context: context,
+      barrierDismissible: true,
+    );
+    if (result ?? false) {
+      _updateMangasList();
+    }
   }
 
   void _addManga() async {
