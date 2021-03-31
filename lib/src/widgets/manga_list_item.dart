@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:manga_volume_tracker/src/model/manga.dart';
 
+import 'delete_manga_swipe.dart';
+
 class MangaListItem extends StatelessWidget {
   final Manga manga;
   final int index;
@@ -45,30 +47,6 @@ class MangaListItem extends StatelessWidget {
               },
             ),
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class DeleteMangaSwipe extends StatelessWidget {
-  const DeleteMangaSwipe({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.red,
-      alignment: AlignmentDirectional.centerStart,
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Row(
-          children: [
-            Icon(Icons.delete),
-            Padding(padding: const EdgeInsets.symmetric(horizontal: 5)),
-            Text("Löschen"),
-          ],
         ),
       ),
     );
