@@ -318,12 +318,6 @@ final ThemeData darkModeColorTheme = ThemeData(
     ),
   ),
   inputDecorationTheme: InputDecorationTheme(
-    labelStyle: TextStyle(
-      color: Color(0xffffffff),
-      fontSize: 16.0,
-      fontWeight: FontWeight.w400,
-      fontStyle: FontStyle.normal,
-    ),
     helperStyle: TextStyle(
       color: Color(0xffffffff),
       fontSize: 16.0,
@@ -337,7 +331,7 @@ final ThemeData darkModeColorTheme = ThemeData(
       fontStyle: FontStyle.normal,
     ),
     errorStyle: TextStyle(
-      color: Color(0xffffffff),
+      color: Color(0xffd32f2f),
       fontSize: 16.0,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
@@ -370,7 +364,7 @@ final ThemeData darkModeColorTheme = ThemeData(
     fillColor: Color(0x00000000),
     errorBorder: UnderlineInputBorder(
       borderSide: BorderSide(
-        color: Color(0xff000000),
+        color: Color(0xffd32f2f),
         width: 1.0,
         style: BorderStyle.solid,
       ),
@@ -386,8 +380,8 @@ final ThemeData darkModeColorTheme = ThemeData(
     ),
     focusedErrorBorder: UnderlineInputBorder(
       borderSide: BorderSide(
-        color: Color(0xff000000),
-        width: 1.0,
+        color: Color(0xffd32f2f),
+        width: 3.0,
         style: BorderStyle.solid,
       ),
       borderRadius: BorderRadius.all(Radius.circular(4.0)),

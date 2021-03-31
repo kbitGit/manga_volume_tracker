@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:manga_volume_tracker/src/dialogs/add_manga_dialog.dart';
+import 'package:manga_volume_tracker/src/dialogs/edit_manga_dialog.dart';
 import 'package:manga_volume_tracker/src/model/manga.dart';
-import 'package:manga_volume_tracker/src/widgets/edit_manga_dialog.dart';
 import 'package:manga_volume_tracker/src/widgets/manga_list_item.dart';
 import 'package:moor/moor.dart';
-import 'add_manga_page.dart';
 
 class MainPage extends StatefulWidget {
   MainPage({Key key}) : super(key: key);
@@ -89,7 +89,7 @@ class _MainPageState extends State<MainPage> {
   }
 
   void _openEditMangaScreen(int index, BuildContext context) async {
-    var result = await showDialog(
+    var result = await showDialog<bool>(
       builder: (BuildContext context) {
         return EditMangaDialog(
           db: db,
@@ -105,11 +105,17 @@ class _MainPageState extends State<MainPage> {
   }
 
   void _addManga() async {
-    await Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => AddMangaPage(db),
-      ),
+    var result = await showDialog<bool>(
+      builder: (BuildContext context) {
+        return AddMangaDialog(
+          db: db,
+        );
+      },
+      context: context,
+      barrierDismissible: true,
     );
-    _updateMangasList();
+    if (result ?? false) {
+      _updateMangasList();
+    }
   }
 }
