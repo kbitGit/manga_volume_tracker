@@ -6,12 +6,15 @@ class MangaInputHandle {
   String name;
   int currentVolume;
   int maxVolume;
+  MangaFormat format;
 
   MangaInputHandle();
   MangaInputHandle.fromManga(Manga manga) {
     name = manga.title;
     currentVolume = manga.currentVolume;
     maxVolume = manga.completeVolumeCount;
+    format = manga.format;
+    print(manga.languageId);
   }
 
   bool validate() {

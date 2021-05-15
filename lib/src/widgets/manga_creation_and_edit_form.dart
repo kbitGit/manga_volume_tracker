@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:manga_volume_tracker/src/utils/manga_input_handle.dart';
 
+import 'package:manga_volume_tracker/src/model/manga.dart';
+
 class MangaCreationAndEditForm extends StatefulWidget {
   final MangaInputHandle handle;
 
@@ -108,8 +110,29 @@ class _MangaCreationAndEditFormState extends State<MangaCreationAndEditForm> {
             ],
             textInputAction: TextInputAction.next,
           ),
+          DropdownButtonFormField<MangaFormat>(
+            value: widget.handle.format,
+            onChanged: (value) => widget.handle.format = value,
+            validator: _validateFormatSelected,
+            hint: Text("Manga Format"),
+            items: MangaFormat.values
+                .map(
+                  (e) => DropdownMenuItem<MangaFormat>(
+                    child: Text(e.toString()),
+                    value: e,
+                  ),
+                )
+                .toList(),
+          )
         ],
       ),
     );
+  }
+
+  String _validateFormatSelected(MangaFormat value) {
+    if (value == null) {
+      return "Ein Format muss ausgewählt sein";
+    }
+    return null;
   }
 }

@@ -6,11 +6,27 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 part 'manga.g.dart';
 
+enum MangaFormat { physical, digital }
+
 class Mangas extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get title => text()();
   IntColumn get currentVolume => integer()();
   IntColumn get completeVolumeCount => integer()();
+  IntColumn get format => intEnum<MangaFormat>().withDefault(Constant(0))();
+  IntColumn get languageId => integer().withDefault(Constant(0))();
+}
+
+class Languages extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get language => text()();
+}
+
+class MangaWithLanguage {
+  final Manga manga;
+  final Language language;
+
+  MangaWithLanguage(this.manga, this.language);
 }
 
 LazyDatabase _openConnection() {
@@ -21,7 +37,7 @@ LazyDatabase _openConnection() {
   });
 }
 
-@UseMoor(tables: [Mangas])
+@UseMoor(tables: [Mangas, Languages])
 class Database extends _$Database {
   Database() : super(_openConnection());
 
@@ -40,5 +56,22 @@ class Database extends _$Database {
   }
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
+
+  @override
+  MigrationStrategy get migration => MigrationStrategy(
+        onCreate: (m) => m.createAll(),
+        onUpgrade: (m, from, to) async {
+          if (from == 1) {
+            await m.addColumn(mangas, mangas.format);
+            await m.addColumn(mangas, mangas.languageId);
+            await m.createTable(languages);
+          }
+        },
+        beforeOpen: (details) async {
+          if (details.versionBefore == 1) {
+            await into(languages).insert(Language(id: 0, language: "Deutsch"));
+          }
+        },
+      );
 }

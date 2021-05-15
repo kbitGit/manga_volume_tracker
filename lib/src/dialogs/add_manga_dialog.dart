@@ -33,7 +33,9 @@ class _AddMangaDialogState extends State<AddMangaDialog> {
                 title: moor.Value(handle.name),
                 currentVolume: moor.Value(handle.currentVolume),
                 completeVolumeCount: moor.Value(handle.maxVolume),
+                format: moor.Value(handle.format),
               );
+
               await widget.db.addManga(toInsert);
               Navigator.of(context).pop(true);
             }
