@@ -11,11 +11,11 @@ class MangaListItem extends StatelessWidget {
   final void Function(int index, BuildContext context) handleEditManga;
 
   const MangaListItem(
-      {Key key,
-      @required this.manga,
-      @required this.index,
-      @required this.handleDeleteManga,
-      @required this.handleEditManga})
+      {Key? key,
+      required this.manga,
+      required this.index,
+      required this.handleDeleteManga,
+      required this.handleEditManga})
       : super(key: key);
 
   @override

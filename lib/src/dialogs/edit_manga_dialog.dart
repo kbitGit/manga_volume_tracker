@@ -8,14 +8,15 @@ class EditMangaDialog extends StatefulWidget {
 
   final Database db;
 
-  const EditMangaDialog({Key key, this.manga, this.db}) : super(key: key);
+  const EditMangaDialog({Key? key, required this.manga, required this.db})
+      : super(key: key);
 
   @override
   _EditMangaDialogState createState() => _EditMangaDialogState();
 }
 
 class _EditMangaDialogState extends State<EditMangaDialog> {
-  MangaInputHandle handle;
+  late MangaInputHandle handle;
   @override
   void initState() {
     super.initState();

@@ -7,14 +7,14 @@ import 'package:moor/moor.dart' as moor;
 class AddMangaDialog extends StatefulWidget {
   final Database db;
 
-  const AddMangaDialog({Key key, this.db}) : super(key: key);
+  const AddMangaDialog({Key? key, required this.db}) : super(key: key);
 
   @override
   _AddMangaDialogState createState() => _AddMangaDialogState();
 }
 
 class _AddMangaDialogState extends State<AddMangaDialog> {
-  MangaInputHandle handle;
+  late MangaInputHandle handle;
   @override
   void initState() {
     super.initState();
@@ -30,10 +30,10 @@ class _AddMangaDialogState extends State<AddMangaDialog> {
           onPressed: () async {
             if (handle.validate()) {
               var toInsert = MangasCompanion(
-                title: moor.Value(handle.name),
-                currentVolume: moor.Value(handle.currentVolume),
-                completeVolumeCount: moor.Value(handle.maxVolume),
-                format: moor.Value(handle.format),
+                title: moor.Value(handle.name as String),
+                currentVolume: moor.Value(handle.currentVolume as int),
+                completeVolumeCount: moor.Value(handle.maxVolume as int),
+                format: moor.Value(handle.format as MangaFormat),
               );
 
               await widget.db.addManga(toInsert);

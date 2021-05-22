@@ -7,7 +7,7 @@ import 'package:manga_volume_tracker/src/model/manga.dart';
 class MangaCreationAndEditForm extends StatefulWidget {
   final MangaInputHandle handle;
 
-  MangaCreationAndEditForm(this.handle, {Key key}) : super(key: key);
+  MangaCreationAndEditForm(this.handle, {Key? key}) : super(key: key);
 
   @override
   _MangaCreationAndEditFormState createState() =>
@@ -22,29 +22,35 @@ class _MangaCreationAndEditFormState extends State<MangaCreationAndEditForm> {
   final TextEditingController completedVolumeCountController =
       TextEditingController();
 
-  String _validateName(String value) {
-    if (value.isEmpty) return 'Ein Manga Name wird benötigt.';
+  String? _validateName(String? value) {
+    if (value?.isEmpty ?? true) return 'Ein Manga Name wird benötigt.';
     return null;
   }
 
-  String _validateCurrentVolume(String value) {
+  String? _validateCurrentVolume(String? value) {
     if (value?.isEmpty ?? true)
       return 'Die aktuelle Bänderanzahl wird benötigt.';
-    var current = int.tryParse(value);
-    var completeCount =
-        int.tryParse(completedVolumeCountController.text ?? "0");
+    var current = int.parse(value as String);
+    var completeCount = int.parse(completedVolumeCountController.text);
     if (current > completeCount)
       return "Die aktuelle Bänderanzahl kann nicht größer sein als die Gesamtanzahl an Bändern.";
     return null;
   }
 
-  String _validateCompletedVolumeCount(String value) {
+  String? _validateCompletedVolumeCount(String? value) {
     if (value?.isEmpty ?? true)
       return 'Die Gesamtanzahl an Bändern wird benötigt.';
-    var current = int.parse(currentVolumeController.text ?? "0");
-    var completeCount = int.parse(value);
+    var current = int.parse(currentVolumeController.text);
+    var completeCount = int.parse(value as String);
     if (current > completeCount)
       return "Die Gesamtanzahl an Bändern kann nicht kleiner sein als die aktuelle Bänderanzahl.";
+    return null;
+  }
+
+  String? _validateFormatSelected(MangaFormat? value) {
+    if (value == null) {
+      return "Ein Format muss ausgewählt sein";
+    }
     return null;
   }
 
@@ -127,12 +133,5 @@ class _MangaCreationAndEditFormState extends State<MangaCreationAndEditForm> {
         ],
       ),
     );
-  }
-
-  String _validateFormatSelected(MangaFormat value) {
-    if (value == null) {
-      return "Ein Format muss ausgewählt sein";
-    }
-    return null;
   }
 }

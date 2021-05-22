@@ -6,7 +6,7 @@ import 'package:manga_volume_tracker/src/widgets/manga_list_item.dart';
 import 'package:moor/moor.dart';
 
 class MainPage extends StatefulWidget {
-  MainPage({Key key}) : super(key: key);
+  MainPage({Key? key}) : super(key: key);
 
   @override
   _MainPageState createState() => _MainPageState();
@@ -61,12 +61,12 @@ class _MainPageState extends State<MainPage> {
   }
 
   _handleDeleteManga(int index) async {
-    Manga deletedManga;
+    late Manga deletedManga;
     setState(() {
       deletedManga = mangas.removeAt(index);
     });
     var affectedRows = await db.deleteManga(deletedManga);
-    if (affectedRows > 0 && deletedManga != null) {
+    if (affectedRows > 0) {
       final snackBar = SnackBar(
         content: Text('Manga: ${deletedManga.title} wurde gelöscht.'),
         action: SnackBarAction(
