@@ -22,9 +22,11 @@ final ThemeData defaultColorTheme = ThemeData(
   buttonColor: Color(0xffe0e0e0),
   toggleableActiveColor: Color(0xff00897b),
   secondaryHeaderColor: Color(0xffe0f2f1),
-  textSelectionColor: Color(0xff80cbc4),
-  cursorColor: Color(0xff4285f4),
-  textSelectionHandleColor: Color(0xff4db6ac),
+  textSelectionTheme: TextSelectionThemeData(
+    selectionColor: Color(0xff80cbc4),
+    cursorColor: Color(0xff4285f4),
+    selectionHandleColor: Color(0xff4db6ac),
+  ),
   backgroundColor: Color(0xff80cbc4),
   dialogBackgroundColor: Color(0xffffffff),
   indicatorColor: Color(0xff009688),
@@ -305,12 +307,6 @@ final ThemeData defaultColorTheme = ThemeData(
     ),
   ),
   inputDecorationTheme: InputDecorationTheme(
-    labelStyle: TextStyle(
-      color: Color(0xdd000000),
-      fontSize: 16.0,
-      fontWeight: FontWeight.w400,
-      fontStyle: FontStyle.normal,
-    ),
     helperStyle: TextStyle(
       color: Color(0xdd000000),
       fontSize: 16.0,
@@ -324,8 +320,8 @@ final ThemeData defaultColorTheme = ThemeData(
       fontStyle: FontStyle.normal,
     ),
     errorStyle: TextStyle(
-      color: Color(0xdd000000),
-      fontSize: 16.0,
+      color: Color(0xffd32f2f),
+      fontSize: 14.0,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
     ),
@@ -357,7 +353,7 @@ final ThemeData defaultColorTheme = ThemeData(
     fillColor: Color(0x00000000),
     errorBorder: UnderlineInputBorder(
       borderSide: BorderSide(
-        color: Color(0xff000000),
+        color: Color(0xffd32f2f),
         width: 1.0,
         style: BorderStyle.solid,
       ),
@@ -373,8 +369,8 @@ final ThemeData defaultColorTheme = ThemeData(
     ),
     focusedErrorBorder: UnderlineInputBorder(
       borderSide: BorderSide(
-        color: Color(0xff000000),
-        width: 1.0,
+        color: Color(0xffd32f2f),
+        width: 3.0,
         style: BorderStyle.solid,
       ),
       borderRadius: BorderRadius.all(Radius.circular(4.0)),
