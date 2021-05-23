@@ -44,12 +44,14 @@ class _AddMangaDialogState extends State<AddMangaDialog> {
           label: Text("Manga hinzufügen"),
         )
       ],
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          MangaCreationAndEditForm(handle),
-        ],
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            MangaCreationAndEditForm(handle),
+          ],
+        ),
       ),
     );
   }

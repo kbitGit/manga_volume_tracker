@@ -37,9 +37,21 @@ class MangaListItem extends StatelessWidget {
           child: ListTile(
             title: Text(
               manga.title,
+              style: Theme.of(context).textTheme.headline5,
             ),
-            subtitle: Text(
-                '${manga.currentVolume} von ${manga.completeVolumeCount} Bändern gekauft'),
+            subtitle: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(_getMangaCountText()),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Text('Format: ${manga.format.name}'),
+                  )
+                ],
+              ),
+            ),
             trailing: IconButton(
               icon: Icon(Icons.edit),
               onPressed: () {
@@ -50,5 +62,16 @@ class MangaListItem extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String _getMangaCountText() {
+    if (manga.completeVolumeCount == 0) {
+      if (manga.currentVolume == 1)
+        return '${manga.currentVolume} Bändern gekauft';
+      return '${manga.currentVolume} Band gekauft';
+    }
+    if (manga.completeVolumeCount == 1)
+      return '${manga.currentVolume} von ${manga.completeVolumeCount} Band gekauft';
+    return '${manga.currentVolume} von ${manga.completeVolumeCount} Bändern gekauft';
   }
 }

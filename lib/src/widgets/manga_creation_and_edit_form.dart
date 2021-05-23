@@ -22,6 +22,9 @@ class _MangaCreationAndEditFormState extends State<MangaCreationAndEditForm> {
   final TextEditingController completedVolumeCountController =
       TextEditingController();
 
+  bool _stillReleasing = false;
+  String _previousMaxVolumeCount = "";
+
   String? _validateName(String? value) {
     if (value?.isEmpty ?? true) return 'Ein Manga Name wird benötigt.';
     return null;
@@ -31,13 +34,16 @@ class _MangaCreationAndEditFormState extends State<MangaCreationAndEditForm> {
     if (value?.isEmpty ?? true)
       return 'Die aktuelle Bänderanzahl wird benötigt.';
     var current = int.parse(value as String);
-    var completeCount = int.parse(completedVolumeCountController.text);
-    if (current > completeCount)
-      return "Die aktuelle Bänderanzahl kann nicht größer sein als die Gesamtanzahl an Bändern.";
+    if (!_stillReleasing) {
+      var completeCount = int.parse(completedVolumeCountController.text);
+      if (current > completeCount)
+        return "Die aktuelle Bänderanzahl kann nicht größer sein als die Gesamtanzahl an Bändern.";
+    }
     return null;
   }
 
   String? _validateCompletedVolumeCount(String? value) {
+    if (_stillReleasing) return null;
     if (value?.isEmpty ?? true)
       return 'Die Gesamtanzahl an Bändern wird benötigt.';
     var current = int.parse(currentVolumeController.text);
@@ -71,6 +77,9 @@ class _MangaCreationAndEditFormState extends State<MangaCreationAndEditForm> {
     nameController.text = handle.name ?? "";
     currentVolumeController.text = handle.currentVolume?.toString() ?? "";
     completedVolumeCountController.text = handle.maxVolume?.toString() ?? "";
+    if (handle.maxVolume == 0) {
+      _stillReleasing = true;
+    }
   }
 
   @override
@@ -86,7 +95,6 @@ class _MangaCreationAndEditFormState extends State<MangaCreationAndEditForm> {
             validator: _validateName,
             decoration: InputDecoration(labelText: "Manga Name"),
             textInputAction: TextInputAction.next,
-            onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
           ),
           TextFormField(
             controller: currentVolumeController,
@@ -100,31 +108,56 @@ class _MangaCreationAndEditFormState extends State<MangaCreationAndEditForm> {
             inputFormatters: <TextInputFormatter>[
               FilteringTextInputFormatter.digitsOnly,
             ],
-            onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
-          ),
-          TextFormField(
-            controller: completedVolumeCountController,
-            maxLines: 1,
-            validator: _validateCompletedVolumeCount,
-            decoration: InputDecoration(
-              labelText: "Komplette Bänder Anzahl",
-              errorMaxLines: 4,
-            ),
-            keyboardType: TextInputType.number,
-            inputFormatters: <TextInputFormatter>[
-              FilteringTextInputFormatter.digitsOnly,
-            ],
             textInputAction: TextInputAction.next,
+          ),
+          Visibility(
+            visible: !_stillReleasing,
+            child: TextFormField(
+              controller: completedVolumeCountController,
+              maxLines: 1,
+              validator: _validateCompletedVolumeCount,
+              decoration: InputDecoration(
+                labelText: "Komplette Bänder Anzahl",
+                errorMaxLines: 4,
+              ),
+              keyboardType: TextInputType.number,
+              inputFormatters: <TextInputFormatter>[
+                FilteringTextInputFormatter.digitsOnly,
+              ],
+              textInputAction: TextInputAction.next,
+            ),
+          ),
+          Row(
+            children: [
+              Text("Noch am Erscheinen:"),
+              Checkbox(
+                value: _stillReleasing,
+                onChanged: (val) => setState(() {
+                  _stillReleasing = val ?? false;
+                  if (_stillReleasing) {
+                    _previousMaxVolumeCount =
+                        completedVolumeCountController.text;
+                    completedVolumeCountController.text = "0";
+                  } else {
+                    completedVolumeCountController.text =
+                        _previousMaxVolumeCount;
+                  }
+                }),
+              ),
+            ],
           ),
           DropdownButtonFormField<MangaFormat>(
             value: widget.handle.format,
             onChanged: (value) => widget.handle.format = value,
             validator: _validateFormatSelected,
-            hint: Text("Manga Format"),
+            decoration: InputDecoration(
+              labelText: "Manga Format",
+              errorMaxLines: 4,
+            ),
             items: MangaFormat.values
                 .map(
                   (e) => DropdownMenuItem<MangaFormat>(
-                    child: Text(e.toString()),
+                    child: Text(e.name),
                     value: e,
                   ),
                 )

@@ -45,12 +45,14 @@ class _EditMangaDialogState extends State<EditMangaDialog> {
           label: Text("Änderungen Speichern"),
         )
       ],
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          MangaCreationAndEditForm(handle),
-        ],
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            MangaCreationAndEditForm(handle),
+          ],
+        ),
       ),
     );
   }
