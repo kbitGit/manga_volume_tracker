@@ -7,6 +7,7 @@ class MangaInputHandle {
   int? currentVolume;
   int? maxVolume;
   MangaFormat? format;
+  String? notes;
 
   MangaInputHandle();
   MangaInputHandle.fromManga(Manga manga) {
@@ -14,6 +15,7 @@ class MangaInputHandle {
     currentVolume = manga.currentVolume;
     maxVolume = manga.completeVolumeCount;
     format = manga.format;
+    notes = manga.notes;
   }
 
   bool validate() {

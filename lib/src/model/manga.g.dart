@@ -13,12 +13,14 @@ class Manga extends DataClass implements Insertable<Manga> {
   final int currentVolume;
   final int completeVolumeCount;
   final MangaFormat format;
+  final String notes;
   Manga(
       {required this.id,
       required this.title,
       required this.currentVolume,
       required this.completeVolumeCount,
-      required this.format});
+      required this.format,
+      required this.notes});
   factory Manga.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String? prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -33,6 +35,8 @@ class Manga extends DataClass implements Insertable<Manga> {
           data['${effectivePrefix}complete_volume_count'])!,
       format: $MangasTable.$converter0.mapToDart(const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}format']))!,
+      notes: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}notes'])!,
     );
   }
   @override
@@ -46,6 +50,7 @@ class Manga extends DataClass implements Insertable<Manga> {
       final converter = $MangasTable.$converter0;
       map['format'] = Variable<int>(converter.mapToSql(format)!);
     }
+    map['notes'] = Variable<String>(notes);
     return map;
   }
 
@@ -56,6 +61,7 @@ class Manga extends DataClass implements Insertable<Manga> {
       currentVolume: Value(currentVolume),
       completeVolumeCount: Value(completeVolumeCount),
       format: Value(format),
+      notes: Value(notes),
     );
   }
 
@@ -69,6 +75,7 @@ class Manga extends DataClass implements Insertable<Manga> {
       completeVolumeCount:
           serializer.fromJson<int>(json['completeVolumeCount']),
       format: serializer.fromJson<MangaFormat>(json['format']),
+      notes: serializer.fromJson<String>(json['notes']),
     );
   }
   @override
@@ -80,6 +87,7 @@ class Manga extends DataClass implements Insertable<Manga> {
       'currentVolume': serializer.toJson<int>(currentVolume),
       'completeVolumeCount': serializer.toJson<int>(completeVolumeCount),
       'format': serializer.toJson<MangaFormat>(format),
+      'notes': serializer.toJson<String>(notes),
     };
   }
 
@@ -88,13 +96,15 @@ class Manga extends DataClass implements Insertable<Manga> {
           String? title,
           int? currentVolume,
           int? completeVolumeCount,
-          MangaFormat? format}) =>
+          MangaFormat? format,
+          String? notes}) =>
       Manga(
         id: id ?? this.id,
         title: title ?? this.title,
         currentVolume: currentVolume ?? this.currentVolume,
         completeVolumeCount: completeVolumeCount ?? this.completeVolumeCount,
         format: format ?? this.format,
+        notes: notes ?? this.notes,
       );
   @override
   String toString() {
@@ -103,7 +113,8 @@ class Manga extends DataClass implements Insertable<Manga> {
           ..write('title: $title, ')
           ..write('currentVolume: $currentVolume, ')
           ..write('completeVolumeCount: $completeVolumeCount, ')
-          ..write('format: $format')
+          ..write('format: $format, ')
+          ..write('notes: $notes')
           ..write(')'))
         .toString();
   }
@@ -113,8 +124,10 @@ class Manga extends DataClass implements Insertable<Manga> {
       id.hashCode,
       $mrjc(
           title.hashCode,
-          $mrjc(currentVolume.hashCode,
-              $mrjc(completeVolumeCount.hashCode, format.hashCode)))));
+          $mrjc(
+              currentVolume.hashCode,
+              $mrjc(completeVolumeCount.hashCode,
+                  $mrjc(format.hashCode, notes.hashCode))))));
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -123,7 +136,8 @@ class Manga extends DataClass implements Insertable<Manga> {
           other.title == this.title &&
           other.currentVolume == this.currentVolume &&
           other.completeVolumeCount == this.completeVolumeCount &&
-          other.format == this.format);
+          other.format == this.format &&
+          other.notes == this.notes);
 }
 
 class MangasCompanion extends UpdateCompanion<Manga> {
@@ -132,12 +146,14 @@ class MangasCompanion extends UpdateCompanion<Manga> {
   final Value<int> currentVolume;
   final Value<int> completeVolumeCount;
   final Value<MangaFormat> format;
+  final Value<String> notes;
   const MangasCompanion({
     this.id = const Value.absent(),
     this.title = const Value.absent(),
     this.currentVolume = const Value.absent(),
     this.completeVolumeCount = const Value.absent(),
     this.format = const Value.absent(),
+    this.notes = const Value.absent(),
   });
   MangasCompanion.insert({
     this.id = const Value.absent(),
@@ -145,6 +161,7 @@ class MangasCompanion extends UpdateCompanion<Manga> {
     required int currentVolume,
     required int completeVolumeCount,
     this.format = const Value.absent(),
+    this.notes = const Value.absent(),
   })  : title = Value(title),
         currentVolume = Value(currentVolume),
         completeVolumeCount = Value(completeVolumeCount);
@@ -154,6 +171,7 @@ class MangasCompanion extends UpdateCompanion<Manga> {
     Expression<int>? currentVolume,
     Expression<int>? completeVolumeCount,
     Expression<MangaFormat>? format,
+    Expression<String>? notes,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -162,6 +180,7 @@ class MangasCompanion extends UpdateCompanion<Manga> {
       if (completeVolumeCount != null)
         'complete_volume_count': completeVolumeCount,
       if (format != null) 'format': format,
+      if (notes != null) 'notes': notes,
     });
   }
 
@@ -170,13 +189,15 @@ class MangasCompanion extends UpdateCompanion<Manga> {
       Value<String>? title,
       Value<int>? currentVolume,
       Value<int>? completeVolumeCount,
-      Value<MangaFormat>? format}) {
+      Value<MangaFormat>? format,
+      Value<String>? notes}) {
     return MangasCompanion(
       id: id ?? this.id,
       title: title ?? this.title,
       currentVolume: currentVolume ?? this.currentVolume,
       completeVolumeCount: completeVolumeCount ?? this.completeVolumeCount,
       format: format ?? this.format,
+      notes: notes ?? this.notes,
     );
   }
 
@@ -199,6 +220,9 @@ class MangasCompanion extends UpdateCompanion<Manga> {
       final converter = $MangasTable.$converter0;
       map['format'] = Variable<int>(converter.mapToSql(format.value)!);
     }
+    if (notes.present) {
+      map['notes'] = Variable<String>(notes.value);
+    }
     return map;
   }
 
@@ -209,7 +233,8 @@ class MangasCompanion extends UpdateCompanion<Manga> {
           ..write('title: $title, ')
           ..write('currentVolume: $currentVolume, ')
           ..write('completeVolumeCount: $completeVolumeCount, ')
-          ..write('format: $format')
+          ..write('format: $format, ')
+          ..write('notes: $notes')
           ..write(')'))
         .toString();
   }
@@ -271,9 +296,17 @@ class $MangasTable extends Mangas with TableInfo<$MangasTable, Manga> {
         defaultValue: Constant(0));
   }
 
+  final VerificationMeta _notesMeta = const VerificationMeta('notes');
+  @override
+  late final GeneratedTextColumn notes = _constructNotes();
+  GeneratedTextColumn _constructNotes() {
+    return GeneratedTextColumn('notes', $tableName, false,
+        defaultValue: Constant(""));
+  }
+
   @override
   List<GeneratedColumn> get $columns =>
-      [id, title, currentVolume, completeVolumeCount, format];
+      [id, title, currentVolume, completeVolumeCount, format, notes];
   @override
   $MangasTable get asDslTable => this;
   @override
@@ -311,6 +344,10 @@ class $MangasTable extends Mangas with TableInfo<$MangasTable, Manga> {
       context.missing(_completeVolumeCountMeta);
     }
     context.handle(_formatMeta, const VerificationResult.success());
+    if (data.containsKey('notes')) {
+      context.handle(
+          _notesMeta, notes.isAcceptableOrUnknown(data['notes']!, _notesMeta));
+    }
     return context;
   }
 

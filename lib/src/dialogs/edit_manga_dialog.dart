@@ -36,6 +36,7 @@ class _EditMangaDialogState extends State<EditMangaDialog> {
                 currentVolume: handle.currentVolume,
                 completeVolumeCount: handle.maxVolume,
                 format: handle.format,
+                notes: handle.notes ?? "",
               );
               var success = await widget.db.updateManga(mangaToUpdate);
               Navigator.of(context).pop(success);

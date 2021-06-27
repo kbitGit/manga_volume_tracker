@@ -25,6 +25,7 @@ class Mangas extends Table {
   IntColumn get currentVolume => integer()();
   IntColumn get completeVolumeCount => integer()();
   IntColumn get format => intEnum<MangaFormat>().withDefault(Constant(0))();
+  TextColumn get notes => text().withDefault(Constant(""))();
 }
 
 LazyDatabase _openConnection() {
@@ -54,14 +55,17 @@ class Database extends _$Database {
   }
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
         onCreate: (m) => m.createAll(),
         onUpgrade: (m, from, to) async {
-          if (from == 1) {
+          if (from < 2) {
             await m.addColumn(mangas, mangas.format);
+          }
+          if (from < 3) {
+            await m.addColumn(mangas, mangas.notes);
           }
         },
         beforeOpen: (details) async {},
