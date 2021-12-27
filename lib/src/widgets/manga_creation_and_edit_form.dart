@@ -82,6 +82,7 @@ class _MangaCreationAndEditFormState extends State<MangaCreationAndEditForm> {
     nameController.text = handle.name ?? "";
     currentVolumeController.text = handle.currentVolume?.toString() ?? "";
     completedVolumeCountController.text = handle.maxVolume?.toString() ?? "";
+    noteController.text = handle.notes?.toString() ?? "";
     if (handle.maxVolume == 0) {
       _stillReleasing = true;
     }
@@ -143,6 +144,11 @@ class _MangaCreationAndEditFormState extends State<MangaCreationAndEditForm> {
                     _previousMaxVolumeCount =
                         completedVolumeCountController.text;
                     completedVolumeCountController.text = "0";
+                  } else if (_previousMaxVolumeCount.isEmpty) {
+                    completedVolumeCountController.text =
+                        currentVolumeController.text.isNotEmpty
+                            ? currentVolumeController.text
+                            : "0";
                   } else {
                     completedVolumeCountController.text =
                         _previousMaxVolumeCount;
@@ -170,12 +176,11 @@ class _MangaCreationAndEditFormState extends State<MangaCreationAndEditForm> {
           ),
           TextFormField(
             controller: noteController,
-            maxLines: 5,
+            maxLines: 3,
             decoration: InputDecoration(
               labelText: "Notizen",
               errorMaxLines: 4,
             ),
-            textInputAction: TextInputAction.done,
           ),
         ],
       ),

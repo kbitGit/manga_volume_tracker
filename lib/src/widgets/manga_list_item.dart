@@ -34,10 +34,10 @@ class MangaListItem extends StatelessWidget {
         child: Card(
           margin: EdgeInsets.zero,
           elevation: 2,
-          child: ListTile(
+          child: ExpansionTile(
             title: Text(
               manga.title,
-              style: Theme.of(context).textTheme.headline5,
+              textScaleFactor: 1.8,
             ),
             subtitle: Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -52,6 +52,44 @@ class MangaListItem extends StatelessWidget {
                 ],
               ),
             ),
+            children: [
+              ListTile(
+                //IntrisicHeight needed for Vertical Divider
+                title: IntrinsicHeight(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        children: [
+                          Text(
+                            "Notizen:",
+                            textScaleFactor: 1.5,
+                          ),
+                          Text(manga.notes)
+                        ],
+                      ),
+                      Visibility(
+                        visible: manga.completeVolumeCount == 0 ||
+                            manga.currentVolume < manga.completeVolumeCount,
+                        child: VerticalDivider(
+                          thickness: 3,
+                        ),
+                      ),
+                      Visibility(
+                        visible: manga.completeVolumeCount == 0 ||
+                            manga.currentVolume < manga.completeVolumeCount,
+                        child: ElevatedButton.icon(
+                          onPressed: () {},
+                          icon: Icon(Icons.add_box),
+                          label: Text("Band hinzufügen"),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+            leading: _getIcon(manga.format),
             trailing: IconButton(
               icon: Icon(Icons.edit),
               onPressed: () {
@@ -73,5 +111,14 @@ class MangaListItem extends StatelessWidget {
     if (manga.completeVolumeCount == 1)
       return '${manga.currentVolume} von ${manga.completeVolumeCount} Band gekauft';
     return '${manga.currentVolume} von ${manga.completeVolumeCount} Bändern gekauft';
+  }
+}
+
+Widget _getIcon(MangaFormat format) {
+  switch (format) {
+    case MangaFormat.physical:
+      return Icon(Icons.book);
+    case MangaFormat.digital:
+      return Icon(Icons.book_online);
   }
 }

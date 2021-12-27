@@ -21,8 +21,7 @@ class Manga extends DataClass implements Insertable<Manga> {
       required this.completeVolumeCount,
       required this.format,
       required this.notes});
-  factory Manga.fromData(Map<String, dynamic> data, GeneratedDatabase db,
-      {String? prefix}) {
+  factory Manga.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return Manga(
       id: const IntType()
@@ -67,7 +66,7 @@ class Manga extends DataClass implements Insertable<Manga> {
 
   factory Manga.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return Manga(
       id: serializer.fromJson<int>(json['id']),
       title: serializer.fromJson<String>(json['title']),
@@ -80,7 +79,7 @@ class Manga extends DataClass implements Insertable<Manga> {
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'title': serializer.toJson<String>(title),
@@ -326,7 +325,7 @@ class $MangasTable extends Mangas with TableInfo<$MangasTable, Manga> {
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   Manga map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return Manga.fromData(data, _db,
+    return Manga.fromData(data,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 

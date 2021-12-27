@@ -1,9 +1,9 @@
+import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
 import 'package:manga_volume_tracker/src/dialogs/add_manga_dialog.dart';
 import 'package:manga_volume_tracker/src/dialogs/edit_manga_dialog.dart';
 import 'package:manga_volume_tracker/src/model/manga.dart';
 import 'package:manga_volume_tracker/src/widgets/manga_list_item.dart';
-import 'package:moor/moor.dart';
 
 class MainPage extends StatefulWidget {
   MainPage({Key? key}) : super(key: key);
