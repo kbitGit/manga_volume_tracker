@@ -40,10 +40,16 @@ LazyDatabase _openConnection() {
 class Database extends _$Database {
   Database() : super(_openConnection());
 
-  Future<List<Manga>> get allMangas => select(mangas).get();
+  Stream<List<Manga>> get allMangas =>
+      (select(mangas)..orderBy([(t) => OrderingTerm.asc(t.title)])).watch();
 
   Future<int> addManga(MangasCompanion entry) {
     return into(mangas).insert(entry);
+  }
+
+  Future<int> increaseCurrentVolumes(int id, int newValue) {
+    return (update(mangas)..where((tbl) => tbl.id.equals(id)))
+        .write(MangasCompanion(currentVolume: Value(newValue)));
   }
 
   Future<bool> updateManga(Manga updatedEntry) {

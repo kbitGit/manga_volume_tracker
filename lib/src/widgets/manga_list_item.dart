@@ -1,22 +1,19 @@
+import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
+import 'package:manga_volume_tracker/src/dialogs/edit_manga_dialog.dart';
 import 'package:manga_volume_tracker/src/model/manga.dart';
+import 'package:manga_volume_tracker/src/utils/db_accessor.dart';
 
 import 'delete_manga_swipe.dart';
 
 class MangaListItem extends StatelessWidget {
   final Manga manga;
   final int index;
-  final void Function(int) handleDeleteManga;
-
-  final void Function(int index, BuildContext context) handleEditManga;
-
-  const MangaListItem(
-      {Key? key,
-      required this.manga,
-      required this.index,
-      required this.handleDeleteManga,
-      required this.handleEditManga})
-      : super(key: key);
+  const MangaListItem({
+    Key? key,
+    required this.manga,
+    required this.index,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +25,27 @@ class MangaListItem extends StatelessWidget {
         direction: DismissDirection.startToEnd,
         onDismissed: (DismissDirection direction) async {
           if (direction == DismissDirection.startToEnd) {
-            handleDeleteManga(index);
+            var affectedRows = await DbAccessor.db.deleteManga(manga);
+            if (affectedRows > 0) {
+              final snackBar = SnackBar(
+                content: Text('Manga: ${manga.title} wurde gelöscht.'),
+                action: SnackBarAction(
+                  label: 'Manga wiederherstellen.',
+                  onPressed: () async {
+                    await DbAccessor.db.addManga(
+                      MangasCompanion(
+                        id: drift.Value(manga.id),
+                        title: drift.Value(manga.title),
+                        currentVolume: drift.Value(manga.currentVolume),
+                        completeVolumeCount:
+                            drift.Value(manga.completeVolumeCount),
+                      ),
+                    );
+                  },
+                ),
+              );
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            }
           }
         },
         child: Card(
@@ -79,7 +96,14 @@ class MangaListItem extends StatelessWidget {
                         visible: manga.completeVolumeCount == 0 ||
                             manga.currentVolume < manga.completeVolumeCount,
                         child: ElevatedButton.icon(
-                          onPressed: () {},
+                          onPressed: () async {
+                            var res = await DbAccessor.db
+                                .increaseCurrentVolumes(
+                                    manga.id, manga.currentVolume + 1);
+                            if (res != 1) {
+                              print("Update failed");
+                            }
+                          },
                           icon: Icon(Icons.add_box),
                           label: Text("Band hinzufügen"),
                         ),
@@ -92,8 +116,16 @@ class MangaListItem extends StatelessWidget {
             leading: _getIcon(manga.format),
             trailing: IconButton(
               icon: Icon(Icons.edit),
-              onPressed: () {
-                handleEditManga(index, context);
+              onPressed: () async {
+                await showDialog<bool>(
+                  builder: (BuildContext context) {
+                    return EditMangaDialog(
+                      manga: manga,
+                    );
+                  },
+                  context: context,
+                  barrierDismissible: true,
+                );
               },
             ),
           ),
