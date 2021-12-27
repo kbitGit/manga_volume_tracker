@@ -12,73 +12,98 @@ class Manga extends DataClass implements Insertable<Manga> {
   final String title;
   final int currentVolume;
   final int completeVolumeCount;
+  final MangaFormat format;
+  final String notes;
   Manga(
-      {@required this.id,
-      @required this.title,
-      @required this.currentVolume,
-      @required this.completeVolumeCount});
-  factory Manga.fromData(Map<String, dynamic> data, GeneratedDatabase db,
-      {String prefix}) {
+      {required this.id,
+      required this.title,
+      required this.currentVolume,
+      required this.completeVolumeCount,
+      required this.format,
+      required this.notes});
+  factory Manga.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
-    final intType = db.typeSystem.forDartType<int>();
-    final stringType = db.typeSystem.forDartType<String>();
     return Manga(
-      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
-      title:
-          stringType.mapFromDatabaseResponse(data['${effectivePrefix}title']),
-      currentVolume: intType
-          .mapFromDatabaseResponse(data['${effectivePrefix}current_volume']),
-      completeVolumeCount: intType.mapFromDatabaseResponse(
-          data['${effectivePrefix}complete_volume_count']),
+      id: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
+      title: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}title'])!,
+      currentVolume: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}current_volume'])!,
+      completeVolumeCount: const IntType().mapFromDatabaseResponse(
+          data['${effectivePrefix}complete_volume_count'])!,
+      format: $MangasTable.$converter0.mapToDart(const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}format']))!,
+      notes: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}notes'])!,
     );
   }
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (!nullToAbsent || id != null) {
-      map['id'] = Variable<int>(id);
+    map['id'] = Variable<int>(id);
+    map['title'] = Variable<String>(title);
+    map['current_volume'] = Variable<int>(currentVolume);
+    map['complete_volume_count'] = Variable<int>(completeVolumeCount);
+    {
+      final converter = $MangasTable.$converter0;
+      map['format'] = Variable<int>(converter.mapToSql(format)!);
     }
-    if (!nullToAbsent || title != null) {
-      map['title'] = Variable<String>(title);
-    }
-    if (!nullToAbsent || currentVolume != null) {
-      map['current_volume'] = Variable<int>(currentVolume);
-    }
-    if (!nullToAbsent || completeVolumeCount != null) {
-      map['complete_volume_count'] = Variable<int>(completeVolumeCount);
-    }
+    map['notes'] = Variable<String>(notes);
     return map;
   }
 
+  MangasCompanion toCompanion(bool nullToAbsent) {
+    return MangasCompanion(
+      id: Value(id),
+      title: Value(title),
+      currentVolume: Value(currentVolume),
+      completeVolumeCount: Value(completeVolumeCount),
+      format: Value(format),
+      notes: Value(notes),
+    );
+  }
+
   factory Manga.fromJson(Map<String, dynamic> json,
-      {ValueSerializer serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return Manga(
       id: serializer.fromJson<int>(json['id']),
       title: serializer.fromJson<String>(json['title']),
       currentVolume: serializer.fromJson<int>(json['currentVolume']),
       completeVolumeCount:
           serializer.fromJson<int>(json['completeVolumeCount']),
+      format: serializer.fromJson<MangaFormat>(json['format']),
+      notes: serializer.fromJson<String>(json['notes']),
     );
   }
   @override
-  Map<String, dynamic> toJson({ValueSerializer serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'title': serializer.toJson<String>(title),
       'currentVolume': serializer.toJson<int>(currentVolume),
       'completeVolumeCount': serializer.toJson<int>(completeVolumeCount),
+      'format': serializer.toJson<MangaFormat>(format),
+      'notes': serializer.toJson<String>(notes),
     };
   }
 
   Manga copyWith(
-          {int id, String title, int currentVolume, int completeVolumeCount}) =>
+          {int? id,
+          String? title,
+          int? currentVolume,
+          int? completeVolumeCount,
+          MangaFormat? format,
+          String? notes}) =>
       Manga(
         id: id ?? this.id,
         title: title ?? this.title,
         currentVolume: currentVolume ?? this.currentVolume,
         completeVolumeCount: completeVolumeCount ?? this.completeVolumeCount,
+        format: format ?? this.format,
+        notes: notes ?? this.notes,
       );
   @override
   String toString() {
@@ -86,24 +111,26 @@ class Manga extends DataClass implements Insertable<Manga> {
           ..write('id: $id, ')
           ..write('title: $title, ')
           ..write('currentVolume: $currentVolume, ')
-          ..write('completeVolumeCount: $completeVolumeCount')
+          ..write('completeVolumeCount: $completeVolumeCount, ')
+          ..write('format: $format, ')
+          ..write('notes: $notes')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(
-      id.hashCode,
-      $mrjc(title.hashCode,
-          $mrjc(currentVolume.hashCode, completeVolumeCount.hashCode))));
+  int get hashCode =>
+      Object.hash(id, title, currentVolume, completeVolumeCount, format, notes);
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Manga &&
           other.id == this.id &&
           other.title == this.title &&
           other.currentVolume == this.currentVolume &&
-          other.completeVolumeCount == this.completeVolumeCount);
+          other.completeVolumeCount == this.completeVolumeCount &&
+          other.format == this.format &&
+          other.notes == this.notes);
 }
 
 class MangasCompanion extends UpdateCompanion<Manga> {
@@ -111,25 +138,33 @@ class MangasCompanion extends UpdateCompanion<Manga> {
   final Value<String> title;
   final Value<int> currentVolume;
   final Value<int> completeVolumeCount;
+  final Value<MangaFormat> format;
+  final Value<String> notes;
   const MangasCompanion({
     this.id = const Value.absent(),
     this.title = const Value.absent(),
     this.currentVolume = const Value.absent(),
     this.completeVolumeCount = const Value.absent(),
+    this.format = const Value.absent(),
+    this.notes = const Value.absent(),
   });
   MangasCompanion.insert({
     this.id = const Value.absent(),
-    @required String title,
-    @required int currentVolume,
-    @required int completeVolumeCount,
+    required String title,
+    required int currentVolume,
+    required int completeVolumeCount,
+    this.format = const Value.absent(),
+    this.notes = const Value.absent(),
   })  : title = Value(title),
         currentVolume = Value(currentVolume),
         completeVolumeCount = Value(completeVolumeCount);
   static Insertable<Manga> custom({
-    Expression<int> id,
-    Expression<String> title,
-    Expression<int> currentVolume,
-    Expression<int> completeVolumeCount,
+    Expression<int>? id,
+    Expression<String>? title,
+    Expression<int>? currentVolume,
+    Expression<int>? completeVolumeCount,
+    Expression<MangaFormat>? format,
+    Expression<String>? notes,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -137,19 +172,25 @@ class MangasCompanion extends UpdateCompanion<Manga> {
       if (currentVolume != null) 'current_volume': currentVolume,
       if (completeVolumeCount != null)
         'complete_volume_count': completeVolumeCount,
+      if (format != null) 'format': format,
+      if (notes != null) 'notes': notes,
     });
   }
 
   MangasCompanion copyWith(
-      {Value<int> id,
-      Value<String> title,
-      Value<int> currentVolume,
-      Value<int> completeVolumeCount}) {
+      {Value<int>? id,
+      Value<String>? title,
+      Value<int>? currentVolume,
+      Value<int>? completeVolumeCount,
+      Value<MangaFormat>? format,
+      Value<String>? notes}) {
     return MangasCompanion(
       id: id ?? this.id,
       title: title ?? this.title,
       currentVolume: currentVolume ?? this.currentVolume,
       completeVolumeCount: completeVolumeCount ?? this.completeVolumeCount,
+      format: format ?? this.format,
+      notes: notes ?? this.notes,
     );
   }
 
@@ -168,83 +209,91 @@ class MangasCompanion extends UpdateCompanion<Manga> {
     if (completeVolumeCount.present) {
       map['complete_volume_count'] = Variable<int>(completeVolumeCount.value);
     }
+    if (format.present) {
+      final converter = $MangasTable.$converter0;
+      map['format'] = Variable<int>(converter.mapToSql(format.value)!);
+    }
+    if (notes.present) {
+      map['notes'] = Variable<String>(notes.value);
+    }
     return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('MangasCompanion(')
+          ..write('id: $id, ')
+          ..write('title: $title, ')
+          ..write('currentVolume: $currentVolume, ')
+          ..write('completeVolumeCount: $completeVolumeCount, ')
+          ..write('format: $format, ')
+          ..write('notes: $notes')
+          ..write(')'))
+        .toString();
   }
 }
 
 class $MangasTable extends Mangas with TableInfo<$MangasTable, Manga> {
   final GeneratedDatabase _db;
-  final String _alias;
+  final String? _alias;
   $MangasTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
-  GeneratedIntColumn _id;
   @override
-  GeneratedIntColumn get id => _id ??= _constructId();
-  GeneratedIntColumn _constructId() {
-    return GeneratedIntColumn('id', $tableName, false,
-        hasAutoIncrement: true, declaredAsPrimaryKey: true);
-  }
-
+  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+      'id', aliasedName, false,
+      type: const IntType(),
+      requiredDuringInsert: false,
+      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _titleMeta = const VerificationMeta('title');
-  GeneratedTextColumn _title;
   @override
-  GeneratedTextColumn get title => _title ??= _constructTitle();
-  GeneratedTextColumn _constructTitle() {
-    return GeneratedTextColumn(
-      'title',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<String?> title = GeneratedColumn<String?>(
+      'title', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
   final VerificationMeta _currentVolumeMeta =
       const VerificationMeta('currentVolume');
-  GeneratedIntColumn _currentVolume;
   @override
-  GeneratedIntColumn get currentVolume =>
-      _currentVolume ??= _constructCurrentVolume();
-  GeneratedIntColumn _constructCurrentVolume() {
-    return GeneratedIntColumn(
-      'current_volume',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<int?> currentVolume = GeneratedColumn<int?>(
+      'current_volume', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
   final VerificationMeta _completeVolumeCountMeta =
       const VerificationMeta('completeVolumeCount');
-  GeneratedIntColumn _completeVolumeCount;
   @override
-  GeneratedIntColumn get completeVolumeCount =>
-      _completeVolumeCount ??= _constructCompleteVolumeCount();
-  GeneratedIntColumn _constructCompleteVolumeCount() {
-    return GeneratedIntColumn(
-      'complete_volume_count',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<int?> completeVolumeCount = GeneratedColumn<int?>(
+      'complete_volume_count', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
+  final VerificationMeta _formatMeta = const VerificationMeta('format');
+  @override
+  late final GeneratedColumnWithTypeConverter<MangaFormat, int?> format =
+      GeneratedColumn<int?>('format', aliasedName, false,
+              type: const IntType(),
+              requiredDuringInsert: false,
+              defaultValue: Constant(0))
+          .withConverter<MangaFormat>($MangasTable.$converter0);
+  final VerificationMeta _notesMeta = const VerificationMeta('notes');
+  @override
+  late final GeneratedColumn<String?> notes = GeneratedColumn<String?>(
+      'notes', aliasedName, false,
+      type: const StringType(),
+      requiredDuringInsert: false,
+      defaultValue: Constant(""));
   @override
   List<GeneratedColumn> get $columns =>
-      [id, title, currentVolume, completeVolumeCount];
+      [id, title, currentVolume, completeVolumeCount, format, notes];
   @override
-  $MangasTable get asDslTable => this;
+  String get aliasedName => _alias ?? 'mangas';
   @override
-  String get $tableName => _alias ?? 'mangas';
-  @override
-  final String actualTableName = 'mangas';
+  String get actualTableName => 'mangas';
   @override
   VerificationContext validateIntegrity(Insertable<Manga> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
     if (data.containsKey('title')) {
       context.handle(
-          _titleMeta, title.isAcceptableOrUnknown(data['title'], _titleMeta));
+          _titleMeta, title.isAcceptableOrUnknown(data['title']!, _titleMeta));
     } else if (isInserting) {
       context.missing(_titleMeta);
     }
@@ -252,7 +301,7 @@ class $MangasTable extends Mangas with TableInfo<$MangasTable, Manga> {
       context.handle(
           _currentVolumeMeta,
           currentVolume.isAcceptableOrUnknown(
-              data['current_volume'], _currentVolumeMeta));
+              data['current_volume']!, _currentVolumeMeta));
     } else if (isInserting) {
       context.missing(_currentVolumeMeta);
     }
@@ -260,9 +309,14 @@ class $MangasTable extends Mangas with TableInfo<$MangasTable, Manga> {
       context.handle(
           _completeVolumeCountMeta,
           completeVolumeCount.isAcceptableOrUnknown(
-              data['complete_volume_count'], _completeVolumeCountMeta));
+              data['complete_volume_count']!, _completeVolumeCountMeta));
     } else if (isInserting) {
       context.missing(_completeVolumeCountMeta);
+    }
+    context.handle(_formatMeta, const VerificationResult.success());
+    if (data.containsKey('notes')) {
+      context.handle(
+          _notesMeta, notes.isAcceptableOrUnknown(data['notes']!, _notesMeta));
     }
     return context;
   }
@@ -270,21 +324,23 @@ class $MangasTable extends Mangas with TableInfo<$MangasTable, Manga> {
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  Manga map(Map<String, dynamic> data, {String tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return Manga.fromData(data, _db, prefix: effectivePrefix);
+  Manga map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return Manga.fromData(data,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
   @override
   $MangasTable createAlias(String alias) {
     return $MangasTable(_db, alias);
   }
+
+  static TypeConverter<MangaFormat, int> $converter0 =
+      const EnumIndexConverter<MangaFormat>(MangaFormat.values);
 }
 
 abstract class _$Database extends GeneratedDatabase {
   _$Database(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
-  $MangasTable _mangas;
-  $MangasTable get mangas => _mangas ??= $MangasTable(this);
+  late final $MangasTable mangas = $MangasTable(this);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override

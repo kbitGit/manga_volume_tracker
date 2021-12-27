@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class DeleteMangaSwipe extends StatelessWidget {
   const DeleteMangaSwipe({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
