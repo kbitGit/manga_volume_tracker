@@ -120,14 +120,8 @@ class Manga extends DataClass implements Insertable<Manga> {
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(
-      id.hashCode,
-      $mrjc(
-          title.hashCode,
-          $mrjc(
-              currentVolume.hashCode,
-              $mrjc(completeVolumeCount.hashCode,
-                  $mrjc(format.hashCode, notes.hashCode))))));
+  int get hashCode =>
+      Object.hash(id, title, currentVolume, completeVolumeCount, format, notes);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -246,73 +240,50 @@ class $MangasTable extends Mangas with TableInfo<$MangasTable, Manga> {
   $MangasTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
   @override
-  late final GeneratedIntColumn id = _constructId();
-  GeneratedIntColumn _constructId() {
-    return GeneratedIntColumn('id', $tableName, false,
-        hasAutoIncrement: true, declaredAsPrimaryKey: true);
-  }
-
+  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+      'id', aliasedName, false,
+      type: const IntType(),
+      requiredDuringInsert: false,
+      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _titleMeta = const VerificationMeta('title');
   @override
-  late final GeneratedTextColumn title = _constructTitle();
-  GeneratedTextColumn _constructTitle() {
-    return GeneratedTextColumn(
-      'title',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<String?> title = GeneratedColumn<String?>(
+      'title', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
   final VerificationMeta _currentVolumeMeta =
       const VerificationMeta('currentVolume');
   @override
-  late final GeneratedIntColumn currentVolume = _constructCurrentVolume();
-  GeneratedIntColumn _constructCurrentVolume() {
-    return GeneratedIntColumn(
-      'current_volume',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<int?> currentVolume = GeneratedColumn<int?>(
+      'current_volume', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
   final VerificationMeta _completeVolumeCountMeta =
       const VerificationMeta('completeVolumeCount');
   @override
-  late final GeneratedIntColumn completeVolumeCount =
-      _constructCompleteVolumeCount();
-  GeneratedIntColumn _constructCompleteVolumeCount() {
-    return GeneratedIntColumn(
-      'complete_volume_count',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<int?> completeVolumeCount = GeneratedColumn<int?>(
+      'complete_volume_count', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
   final VerificationMeta _formatMeta = const VerificationMeta('format');
   @override
-  late final GeneratedIntColumn format = _constructFormat();
-  GeneratedIntColumn _constructFormat() {
-    return GeneratedIntColumn('format', $tableName, false,
-        defaultValue: Constant(0));
-  }
-
+  late final GeneratedColumnWithTypeConverter<MangaFormat, int?> format =
+      GeneratedColumn<int?>('format', aliasedName, false,
+              type: const IntType(),
+              requiredDuringInsert: false,
+              defaultValue: Constant(0))
+          .withConverter<MangaFormat>($MangasTable.$converter0);
   final VerificationMeta _notesMeta = const VerificationMeta('notes');
   @override
-  late final GeneratedTextColumn notes = _constructNotes();
-  GeneratedTextColumn _constructNotes() {
-    return GeneratedTextColumn('notes', $tableName, false,
-        defaultValue: Constant(""));
-  }
-
+  late final GeneratedColumn<String?> notes = GeneratedColumn<String?>(
+      'notes', aliasedName, false,
+      type: const StringType(),
+      requiredDuringInsert: false,
+      defaultValue: Constant(""));
   @override
   List<GeneratedColumn> get $columns =>
       [id, title, currentVolume, completeVolumeCount, format, notes];
   @override
-  $MangasTable get asDslTable => this;
+  String get aliasedName => _alias ?? 'mangas';
   @override
-  String get $tableName => _alias ?? 'mangas';
-  @override
-  final String actualTableName = 'mangas';
+  String get actualTableName => 'mangas';
   @override
   VerificationContext validateIntegrity(Insertable<Manga> instance,
       {bool isInserting = false}) {
@@ -355,8 +326,8 @@ class $MangasTable extends Mangas with TableInfo<$MangasTable, Manga> {
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   Manga map(Map<String, dynamic> data, {String? tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return Manga.fromData(data, _db, prefix: effectivePrefix);
+    return Manga.fromData(data, _db,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
   @override
