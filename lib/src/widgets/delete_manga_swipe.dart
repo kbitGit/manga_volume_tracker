@@ -14,9 +14,15 @@ class DeleteMangaSwipe extends StatelessWidget {
         padding: const EdgeInsets.all(10.0),
         child: Row(
           children: [
-            Icon(Icons.delete),
+            Icon(
+              Icons.delete,
+              color: Colors.white,
+            ),
             Padding(padding: const EdgeInsets.symmetric(horizontal: 5)),
-            Text("Löschen"),
+            Text(
+              "Löschen",
+              style: TextStyle(color: Colors.white),
+            ),
           ],
         ),
       ),
