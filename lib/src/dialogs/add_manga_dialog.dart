@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
+import 'package:manga_volume_tracker/generated/l10n.dart';
 import 'package:manga_volume_tracker/src/model/manga.dart';
 import 'package:manga_volume_tracker/src/utils/db_accessor.dart';
 import 'package:manga_volume_tracker/src/utils/manga_input_handle.dart';
@@ -25,7 +26,7 @@ class _AddMangaDialogState extends State<AddMangaDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text("Manga hinzufügen"),
+      title: Text(S.of(context).addManga),
       actions: [
         ElevatedButton.icon(
           onPressed: () async {
@@ -43,7 +44,7 @@ class _AddMangaDialogState extends State<AddMangaDialog> {
             }
           },
           icon: Icon(Icons.save),
-          label: Text("Manga hinzufügen"),
+          label: Text(S.of(context).addManga),
         )
       ],
       content: SingleChildScrollView(

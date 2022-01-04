@@ -3,6 +3,7 @@ import 'package:manga_volume_tracker/src/model/manga.dart';
 import 'package:manga_volume_tracker/src/utils/db_accessor.dart';
 import 'package:manga_volume_tracker/src/utils/manga_input_handle.dart';
 import 'package:manga_volume_tracker/src/widgets/manga_creation_and_edit_form.dart';
+import 'package:manga_volume_tracker/generated/l10n.dart';
 
 class EditMangaDialog extends StatefulWidget {
   final Manga manga;
@@ -24,7 +25,7 @@ class _EditMangaDialogState extends State<EditMangaDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text("Manga bearbeiten"),
+      title: Text(S.of(context).editManga),
       actions: [
         ElevatedButton.icon(
           onPressed: () async {
@@ -41,7 +42,7 @@ class _EditMangaDialogState extends State<EditMangaDialog> {
             }
           },
           icon: Icon(Icons.save),
-          label: Text("Änderungen Speichern"),
+          label: Text(S.of(context).saveChanges),
         )
       ],
       content: SingleChildScrollView(

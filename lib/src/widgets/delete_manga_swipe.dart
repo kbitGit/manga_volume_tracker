@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:manga_volume_tracker/generated/l10n.dart';
 
 class DeleteMangaSwipe extends StatelessWidget {
   const DeleteMangaSwipe({
@@ -20,7 +21,7 @@ class DeleteMangaSwipe extends StatelessWidget {
             ),
             Padding(padding: const EdgeInsets.symmetric(horizontal: 5)),
             Text(
-              "Löschen",
+              S.of(context).deleteManga,
               style: TextStyle(color: Colors.white),
             ),
           ],
