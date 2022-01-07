@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:manga_volume_tracker/src/utils/manga_input_handle.dart';
-
 import 'package:manga_volume_tracker/src/model/manga.dart';
+import 'package:manga_volume_tracker/generated/l10n.dart';
 
 class MangaCreationAndEditForm extends StatefulWidget {
   final MangaInputHandle handle;
@@ -28,36 +28,29 @@ class _MangaCreationAndEditFormState extends State<MangaCreationAndEditForm> {
   String _previousMaxVolumeCount = "";
 
   String? _validateName(String? value) {
-    if (value?.isEmpty ?? true) return 'Ein Manga Name wird benötigt.';
+    if (value?.isEmpty ?? true) return S.of(context).mangaNameNeeded;
     return null;
   }
 
   String? _validateCurrentVolume(String? value) {
-    if (value?.isEmpty ?? true)
-      return 'Die aktuelle Bänderanzahl wird benötigt.';
-    var current = int.parse(value as String);
-    if (!_stillReleasing) {
-      var completeCount = int.parse(completedVolumeCountController.text);
-      if (current > completeCount)
-        return "Die aktuelle Bänderanzahl kann nicht größer sein als die Gesamtanzahl an Bändern.";
-    }
+    if (value?.isEmpty ?? true) return S.of(context).currentVolumeCountNeeded;
     return null;
   }
 
   String? _validateCompletedVolumeCount(String? value) {
     if (_stillReleasing) return null;
-    if (value?.isEmpty ?? true)
-      return 'Die Gesamtanzahl an Bändern wird benötigt.';
+    if (value?.isEmpty ?? true) return S.of(context).completeVolumeCountNeeded;
+    if (currentVolumeController.text.isEmpty) return null;
     var current = int.parse(currentVolumeController.text);
     var completeCount = int.parse(value as String);
     if (current > completeCount)
-      return "Die Gesamtanzahl an Bändern kann nicht kleiner sein als die aktuelle Bänderanzahl.";
+      return S.of(context).completeCountCannotBeSmallerThanCurrentCount;
     return null;
   }
 
   String? _validateFormatSelected(MangaFormat? value) {
     if (value == null) {
-      return "Ein Format muss ausgewählt sein";
+      return S.of(context).formatMustBeSelected;
     }
     return null;
   }
@@ -99,14 +92,14 @@ class _MangaCreationAndEditFormState extends State<MangaCreationAndEditForm> {
             controller: nameController,
             maxLines: 1,
             validator: _validateName,
-            decoration: InputDecoration(labelText: "Manga Name"),
+            decoration: InputDecoration(labelText: S.of(context).mangaName),
             textInputAction: TextInputAction.next,
           ),
           TextFormField(
             controller: currentVolumeController,
             maxLines: 1,
             decoration: InputDecoration(
-              labelText: "Aktuelle Bänder Anzahl",
+              labelText: S.of(context).currentVolumeCount,
               errorMaxLines: 4,
             ),
             keyboardType: TextInputType.number,
@@ -123,7 +116,7 @@ class _MangaCreationAndEditFormState extends State<MangaCreationAndEditForm> {
               maxLines: 1,
               validator: _validateCompletedVolumeCount,
               decoration: InputDecoration(
-                labelText: "Komplette Bänder Anzahl",
+                labelText: S.of(context).completeVolumeCount,
                 errorMaxLines: 4,
               ),
               keyboardType: TextInputType.number,
@@ -135,7 +128,8 @@ class _MangaCreationAndEditFormState extends State<MangaCreationAndEditForm> {
           ),
           Row(
             children: [
-              Text("Noch am Erscheinen:"),
+              Text(S.of(context).stillReleasing),
+              Text(":"),
               Checkbox(
                 value: _stillReleasing,
                 onChanged: (val) => setState(() {
@@ -162,7 +156,7 @@ class _MangaCreationAndEditFormState extends State<MangaCreationAndEditForm> {
             onChanged: (value) => widget.handle.format = value,
             validator: _validateFormatSelected,
             decoration: InputDecoration(
-              labelText: "Manga Format",
+              labelText: S.of(context).mangaFormat,
               errorMaxLines: 4,
             ),
             items: MangaFormat.values
@@ -178,7 +172,7 @@ class _MangaCreationAndEditFormState extends State<MangaCreationAndEditForm> {
             controller: noteController,
             maxLines: 3,
             decoration: InputDecoration(
-              labelText: "Notizen",
+              labelText: S.of(context).notes,
               errorMaxLines: 4,
             ),
           ),

@@ -3,6 +3,7 @@ import 'package:manga_volume_tracker/src/dialogs/add_manga_dialog.dart';
 import 'package:manga_volume_tracker/src/model/manga.dart';
 import 'package:manga_volume_tracker/src/utils/db_accessor.dart';
 import 'package:manga_volume_tracker/src/widgets/manga_list_item.dart';
+import 'package:manga_volume_tracker/generated/l10n.dart';
 
 class MainPage extends StatefulWidget {
   MainPage({Key? key}) : super(key: key);
@@ -23,7 +24,7 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Manga Liste'),
+        title: Text(S.of(context).mangaList),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -42,7 +43,7 @@ class _MainPageState extends State<MainPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _addManga,
-        tooltip: 'Manga hinzufügen',
+        tooltip: S.of(context).addManga,
         child: Icon(Icons.add),
       ),
     );

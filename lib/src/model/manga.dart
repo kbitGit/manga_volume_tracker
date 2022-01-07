@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
+import 'package:manga_volume_tracker/generated/l10n.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 part 'manga.g.dart';
@@ -12,9 +13,9 @@ extension nameExtension on MangaFormat {
   String get name {
     switch (this) {
       case MangaFormat.physical:
-        return "Physisch";
+        return S.current.physicalFormat;
       case MangaFormat.digital:
-        return "Digital";
+        return S.current.digitalFormat;
     }
   }
 }

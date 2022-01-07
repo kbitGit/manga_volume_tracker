@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:manga_volume_tracker/src/dialogs/edit_manga_dialog.dart';
 import 'package:manga_volume_tracker/src/model/manga.dart';
 import 'package:manga_volume_tracker/src/utils/db_accessor.dart';
-
+import 'package:manga_volume_tracker/generated/l10n.dart';
 import 'delete_manga_swipe.dart';
 
 class MangaListItem extends StatelessWidget {
@@ -28,9 +28,9 @@ class MangaListItem extends StatelessWidget {
             var affectedRows = await DbAccessor.db.deleteManga(manga);
             if (affectedRows > 0) {
               final snackBar = SnackBar(
-                content: Text('Manga: ${manga.title} wurde gelöscht.'),
+                content: Text(S.of(context).mangaWasDeleted(manga.title)),
                 action: SnackBarAction(
-                  label: 'Manga wiederherstellen.',
+                  label: S.of(context).restoreManga,
                   onPressed: () async {
                     await DbAccessor.db.addManga(
                       MangasCompanion(
@@ -64,7 +64,9 @@ class MangaListItem extends StatelessWidget {
                   Text(_getMangaCountText()),
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),
-                    child: Text('Format: ${manga.format.name}'),
+                    child: Text(
+                      '${S.of(context).mangaFormat}: ${manga.format.name}',
+                    ),
                   )
                 ],
               ),
@@ -79,7 +81,7 @@ class MangaListItem extends StatelessWidget {
                       Column(
                         children: [
                           Text(
-                            "Notizen:",
+                            "${S.of(context).notes}:",
                             textScaleFactor: 1.5,
                           ),
                           Text(manga.notes)
@@ -101,11 +103,11 @@ class MangaListItem extends StatelessWidget {
                                 .increaseCurrentVolumes(
                                     manga.id, manga.currentVolume + 1);
                             if (res != 1) {
-                              print("Update failed");
+                              print("Something went wrong: $res lines updated");
                             }
                           },
                           icon: Icon(Icons.add_box),
-                          label: Text("Band hinzufügen"),
+                          label: Text(S.of(context).addVolume),
                         ),
                       ),
                     ],
@@ -136,13 +138,10 @@ class MangaListItem extends StatelessWidget {
 
   String _getMangaCountText() {
     if (manga.completeVolumeCount == 0) {
-      if (manga.currentVolume == 1)
-        return '${manga.currentVolume} Bändern gekauft';
-      return '${manga.currentVolume} Band gekauft';
+      return S.current.purchasedCurrentVolumes(manga.currentVolume);
     }
-    if (manga.completeVolumeCount == 1)
-      return '${manga.currentVolume} von ${manga.completeVolumeCount} Band gekauft';
-    return '${manga.currentVolume} von ${manga.completeVolumeCount} Bändern gekauft';
+    return S.current.purchasedCurrentVolumesOutOfCompleteVolumeCount(
+        manga.currentVolume, manga.completeVolumeCount);
   }
 }
 
