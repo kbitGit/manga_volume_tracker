@@ -23,7 +23,7 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m0(title) => "Manga: ${title} wurde gelöscht.";
 
   static String m1(count) =>
-      "${Intl.plural(count, zero: 'Kein Bänder gekauft', one: 'Ein Band gekauft', other: '${count} Bänder gekauft')}";
+      "${Intl.plural(count, zero: 'Keine Bänder gekauft', one: 'Ein Band gekauft', other: '${count} Bänder gekauft')}";
 
   static String m2(count, complete) =>
       "${Intl.plural(count, one: '1 von 1 Band gekauft', other: '${count} von ${complete} Bändern gekauft')}";

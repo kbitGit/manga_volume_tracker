@@ -19,7 +19,7 @@
   "mangaWasDeleted": "Manga: {title} wurde gelöscht.",
   "restoreManga": "Manga wiederherstellen.",
   "addVolume": "Band hinzufügen",
-  "purchasedCurrentVolumes": "{count, plural, =0 {Kein Bänder gekauft} one{Ein Band gekauft} other{{count} Bänder gekauft}}",
+  "purchasedCurrentVolumes": "{count, plural, =0 {Keine Bänder gekauft} one{Ein Band gekauft} other{{count} Bänder gekauft}}",
   "purchasedCurrentVolumesOutOfCompleteVolumeCount": "{count, plural, one{1 von 1 Band gekauft} other{{count} von {complete} Bändern gekauft}}",
   "physicalFormat": "Physisch",
   "digitalFormat": "Digital"

@@ -21,6 +21,7 @@ class _AddMangaDialogState extends State<AddMangaDialog> {
   void initState() {
     super.initState();
     handle = MangaInputHandle();
+    handle.format = MangaFormat.physical;
   }
 
   @override
