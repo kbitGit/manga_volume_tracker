@@ -54,7 +54,7 @@ class MangaListItem extends StatelessWidget {
           child: ExpansionTile(
             title: Text(
               manga.title,
-              textScaleFactor: 1.8,
+              textScaler: TextScaler.linear(1.8),
             ),
             subtitle: Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -82,7 +82,7 @@ class MangaListItem extends StatelessWidget {
                         children: [
                           Text(
                             "${S.of(context).notes}:",
-                            textScaleFactor: 1.5,
+                            textScaler: TextScaler.linear(1.5),
                           ),
                           Text(manga.notes)
                         ],

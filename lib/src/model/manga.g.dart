@@ -2,11 +2,129 @@
 
 part of 'manga.dart';
 
-// **************************************************************************
-// MoorGenerator
-// **************************************************************************
+// ignore_for_file: type=lint
+class $MangasTable extends Mangas with TableInfo<$MangasTable, Manga> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $MangasTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _titleMeta = const VerificationMeta('title');
+  @override
+  late final GeneratedColumn<String> title = GeneratedColumn<String>(
+      'title', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _currentVolumeMeta =
+      const VerificationMeta('currentVolume');
+  @override
+  late final GeneratedColumn<int> currentVolume = GeneratedColumn<int>(
+      'current_volume', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _completeVolumeCountMeta =
+      const VerificationMeta('completeVolumeCount');
+  @override
+  late final GeneratedColumn<int> completeVolumeCount = GeneratedColumn<int>(
+      'complete_volume_count', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _formatMeta = const VerificationMeta('format');
+  @override
+  late final GeneratedColumnWithTypeConverter<MangaFormat, int> format =
+      GeneratedColumn<int>('format', aliasedName, false,
+              type: DriftSqlType.int,
+              requiredDuringInsert: false,
+              defaultValue: Constant(0))
+          .withConverter<MangaFormat>($MangasTable.$converterformat);
+  static const VerificationMeta _notesMeta = const VerificationMeta('notes');
+  @override
+  late final GeneratedColumn<String> notes = GeneratedColumn<String>(
+      'notes', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: Constant(""));
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, title, currentVolume, completeVolumeCount, format, notes];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'mangas';
+  @override
+  VerificationContext validateIntegrity(Insertable<Manga> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('title')) {
+      context.handle(
+          _titleMeta, title.isAcceptableOrUnknown(data['title']!, _titleMeta));
+    } else if (isInserting) {
+      context.missing(_titleMeta);
+    }
+    if (data.containsKey('current_volume')) {
+      context.handle(
+          _currentVolumeMeta,
+          currentVolume.isAcceptableOrUnknown(
+              data['current_volume']!, _currentVolumeMeta));
+    } else if (isInserting) {
+      context.missing(_currentVolumeMeta);
+    }
+    if (data.containsKey('complete_volume_count')) {
+      context.handle(
+          _completeVolumeCountMeta,
+          completeVolumeCount.isAcceptableOrUnknown(
+              data['complete_volume_count']!, _completeVolumeCountMeta));
+    } else if (isInserting) {
+      context.missing(_completeVolumeCountMeta);
+    }
+    context.handle(_formatMeta, const VerificationResult.success());
+    if (data.containsKey('notes')) {
+      context.handle(
+          _notesMeta, notes.isAcceptableOrUnknown(data['notes']!, _notesMeta));
+    }
+    return context;
+  }
 
-// ignore_for_file: unnecessary_brace_in_string_interps, unnecessary_this
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Manga map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Manga(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      title: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}title'])!,
+      currentVolume: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}current_volume'])!,
+      completeVolumeCount: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}complete_volume_count'])!,
+      format: $MangasTable.$converterformat.fromSql(attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}format'])!),
+      notes: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}notes'])!,
+    );
+  }
+
+  @override
+  $MangasTable createAlias(String alias) {
+    return $MangasTable(attachedDatabase, alias);
+  }
+
+  static JsonTypeConverter2<MangaFormat, int, int> $converterformat =
+      const EnumIndexConverter<MangaFormat>(MangaFormat.values);
+}
+
 class Manga extends DataClass implements Insertable<Manga> {
   final int id;
   final String title;
@@ -14,30 +132,13 @@ class Manga extends DataClass implements Insertable<Manga> {
   final int completeVolumeCount;
   final MangaFormat format;
   final String notes;
-  Manga(
+  const Manga(
       {required this.id,
       required this.title,
       required this.currentVolume,
       required this.completeVolumeCount,
       required this.format,
       required this.notes});
-  factory Manga.fromData(Map<String, dynamic> data, {String? prefix}) {
-    final effectivePrefix = prefix ?? '';
-    return Manga(
-      id: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
-      title: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}title'])!,
-      currentVolume: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}current_volume'])!,
-      completeVolumeCount: const IntType().mapFromDatabaseResponse(
-          data['${effectivePrefix}complete_volume_count'])!,
-      format: $MangasTable.$converter0.mapToDart(const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}format']))!,
-      notes: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}notes'])!,
-    );
-  }
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -46,8 +147,8 @@ class Manga extends DataClass implements Insertable<Manga> {
     map['current_volume'] = Variable<int>(currentVolume);
     map['complete_volume_count'] = Variable<int>(completeVolumeCount);
     {
-      final converter = $MangasTable.$converter0;
-      map['format'] = Variable<int>(converter.mapToSql(format)!);
+      map['format'] =
+          Variable<int>($MangasTable.$converterformat.toSql(format));
     }
     map['notes'] = Variable<String>(notes);
     return map;
@@ -73,7 +174,8 @@ class Manga extends DataClass implements Insertable<Manga> {
       currentVolume: serializer.fromJson<int>(json['currentVolume']),
       completeVolumeCount:
           serializer.fromJson<int>(json['completeVolumeCount']),
-      format: serializer.fromJson<MangaFormat>(json['format']),
+      format: $MangasTable.$converterformat
+          .fromJson(serializer.fromJson<int>(json['format'])),
       notes: serializer.fromJson<String>(json['notes']),
     );
   }
@@ -85,7 +187,8 @@ class Manga extends DataClass implements Insertable<Manga> {
       'title': serializer.toJson<String>(title),
       'currentVolume': serializer.toJson<int>(currentVolume),
       'completeVolumeCount': serializer.toJson<int>(completeVolumeCount),
-      'format': serializer.toJson<MangaFormat>(format),
+      'format':
+          serializer.toJson<int>($MangasTable.$converterformat.toJson(format)),
       'notes': serializer.toJson<String>(notes),
     };
   }
@@ -163,7 +266,7 @@ class MangasCompanion extends UpdateCompanion<Manga> {
     Expression<String>? title,
     Expression<int>? currentVolume,
     Expression<int>? completeVolumeCount,
-    Expression<MangaFormat>? format,
+    Expression<int>? format,
     Expression<String>? notes,
   }) {
     return RawValuesInsertable({
@@ -210,8 +313,8 @@ class MangasCompanion extends UpdateCompanion<Manga> {
       map['complete_volume_count'] = Variable<int>(completeVolumeCount.value);
     }
     if (format.present) {
-      final converter = $MangasTable.$converter0;
-      map['format'] = Variable<int>(converter.mapToSql(format.value)!);
+      map['format'] =
+          Variable<int>($MangasTable.$converterformat.toSql(format.value));
     }
     if (notes.present) {
       map['notes'] = Variable<String>(notes.value);
@@ -233,116 +336,12 @@ class MangasCompanion extends UpdateCompanion<Manga> {
   }
 }
 
-class $MangasTable extends Mangas with TableInfo<$MangasTable, Manga> {
-  final GeneratedDatabase _db;
-  final String? _alias;
-  $MangasTable(this._db, [this._alias]);
-  final VerificationMeta _idMeta = const VerificationMeta('id');
-  @override
-  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
-      'id', aliasedName, false,
-      type: const IntType(),
-      requiredDuringInsert: false,
-      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
-  final VerificationMeta _titleMeta = const VerificationMeta('title');
-  @override
-  late final GeneratedColumn<String?> title = GeneratedColumn<String?>(
-      'title', aliasedName, false,
-      type: const StringType(), requiredDuringInsert: true);
-  final VerificationMeta _currentVolumeMeta =
-      const VerificationMeta('currentVolume');
-  @override
-  late final GeneratedColumn<int?> currentVolume = GeneratedColumn<int?>(
-      'current_volume', aliasedName, false,
-      type: const IntType(), requiredDuringInsert: true);
-  final VerificationMeta _completeVolumeCountMeta =
-      const VerificationMeta('completeVolumeCount');
-  @override
-  late final GeneratedColumn<int?> completeVolumeCount = GeneratedColumn<int?>(
-      'complete_volume_count', aliasedName, false,
-      type: const IntType(), requiredDuringInsert: true);
-  final VerificationMeta _formatMeta = const VerificationMeta('format');
-  @override
-  late final GeneratedColumnWithTypeConverter<MangaFormat, int?> format =
-      GeneratedColumn<int?>('format', aliasedName, false,
-              type: const IntType(),
-              requiredDuringInsert: false,
-              defaultValue: Constant(0))
-          .withConverter<MangaFormat>($MangasTable.$converter0);
-  final VerificationMeta _notesMeta = const VerificationMeta('notes');
-  @override
-  late final GeneratedColumn<String?> notes = GeneratedColumn<String?>(
-      'notes', aliasedName, false,
-      type: const StringType(),
-      requiredDuringInsert: false,
-      defaultValue: Constant(""));
-  @override
-  List<GeneratedColumn> get $columns =>
-      [id, title, currentVolume, completeVolumeCount, format, notes];
-  @override
-  String get aliasedName => _alias ?? 'mangas';
-  @override
-  String get actualTableName => 'mangas';
-  @override
-  VerificationContext validateIntegrity(Insertable<Manga> instance,
-      {bool isInserting = false}) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    }
-    if (data.containsKey('title')) {
-      context.handle(
-          _titleMeta, title.isAcceptableOrUnknown(data['title']!, _titleMeta));
-    } else if (isInserting) {
-      context.missing(_titleMeta);
-    }
-    if (data.containsKey('current_volume')) {
-      context.handle(
-          _currentVolumeMeta,
-          currentVolume.isAcceptableOrUnknown(
-              data['current_volume']!, _currentVolumeMeta));
-    } else if (isInserting) {
-      context.missing(_currentVolumeMeta);
-    }
-    if (data.containsKey('complete_volume_count')) {
-      context.handle(
-          _completeVolumeCountMeta,
-          completeVolumeCount.isAcceptableOrUnknown(
-              data['complete_volume_count']!, _completeVolumeCountMeta));
-    } else if (isInserting) {
-      context.missing(_completeVolumeCountMeta);
-    }
-    context.handle(_formatMeta, const VerificationResult.success());
-    if (data.containsKey('notes')) {
-      context.handle(
-          _notesMeta, notes.isAcceptableOrUnknown(data['notes']!, _notesMeta));
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {id};
-  @override
-  Manga map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return Manga.fromData(data,
-        prefix: tablePrefix != null ? '$tablePrefix.' : null);
-  }
-
-  @override
-  $MangasTable createAlias(String alias) {
-    return $MangasTable(_db, alias);
-  }
-
-  static TypeConverter<MangaFormat, int> $converter0 =
-      const EnumIndexConverter<MangaFormat>(MangaFormat.values);
-}
-
 abstract class _$Database extends GeneratedDatabase {
-  _$Database(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
+  _$Database(QueryExecutor e) : super(e);
   late final $MangasTable mangas = $MangasTable(this);
   @override
-  Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
+  Iterable<TableInfo<Table, Object?>> get allTables =>
+      allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities => [mangas];
 }

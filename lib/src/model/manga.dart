@@ -5,6 +5,8 @@ import 'package:drift/native.dart';
 import 'package:manga_volume_tracker/generated/l10n.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
+import 'package:sqlite3/sqlite3.dart';
+import 'package:sqlite3_flutter_libs/sqlite3_flutter_libs.dart';
 part 'manga.g.dart';
 
 enum MangaFormat { physical, digital }
@@ -33,7 +35,12 @@ LazyDatabase _openConnection() {
   return LazyDatabase(() async {
     final dbFolder = await getApplicationDocumentsDirectory();
     final file = File(p.join(dbFolder.path, 'manga.sqlite'));
-    return NativeDatabase(file);
+    if (Platform.isAndroid) {
+      await applyWorkaroundToOpenSqlite3OnOldAndroidVersions();
+    }
+    final cachebase = (await getTemporaryDirectory()).path;
+    sqlite3.tempDirectory = cachebase;
+    return NativeDatabase.createInBackground(file);
   });
 }
 
